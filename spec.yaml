@@ -3,71 +3,39 @@ blueprint:
   name: Hardware Wallet Integration Patterns
   tier: 1
   category: security-foundational
-  status: in-development
-  version: 0.2
+  status: refined
+  version: "0.5.0"
+  last_refined: "2026-10-18"
 
 metadata:
   description: |
-    A practical, educational guide and set of production-ready patterns for
-    integrating hardware wallets with Antelope/WAX accounts — covering permission
-    management, secure signing flows, best practices, and common pitfalls.
-  target_audience:
-    - Human developers integrating hardware wallets
-    - AI agents generating hardware wallet integration code
-    - Teams prioritizing account security on WAX/Antelope
+    Educational hardware wallet integration patterns for Antelope/WAX —
+    readiness scoring, pitfalls, signing flow steps, permission layouts.
+    Device SDKs age; invariants are the durable layer.
   related_blueprints:
-    - wax-permission-visualizer-and-editor
-    - wax-safe-key-rotation-assistant
     - wax-secure-key-management-and-privacy-tools
+    - wax-multi-sig-proposal-builder-and-simulator
+    - wax-social-recovery-and-key-backup-tools
+    - wax-safe-key-rotation-assistant
+
+invariants:
+  - Host never handles seed material
+  - Readiness and pitfalls are pure functions
+  - Owner-not-daily is a first-class checklist item
+  - Single-device-only designs are flagged
 
 features:
-  - secure_setup_guide
-  - signing_flow_patterns
-  - permission_design_recommendations
-  - common_pitfalls_and_solutions
-  - code_examples
-  - multiple_integration_levels
-
-integration_levels:
-  minimal:
-    description: Basic signing flow with simple permission handling
-    recommended_for: Quick integration and learning
-  recommended:
-    description: Full patterns with permission design, UX guidance, and safety checks
-    recommended_for: Most production integrations
-  advanced:
-    description: Advanced multi-sig + hardware patterns, custom flows
-    recommended_for: Complex or high-security setups
+  implemented:
+    - scoreHardwareReadiness
+    - analyzeHardwarePitfalls
+    - ReadinessChecklist, PitfallsGuide, SigningFlowSteps, PermissionPatterns, demo
 
 machine_instructions:
-  - |
-    Create step-by-step hardware wallet setup guide with clear UX.
-  - |
-    Implement secure signing flow examples using WharfKit patterns.
-  - |
-    Document recommended permission patterns for hardware wallet users.
-  - |
-    Add clear warnings and solutions for common integration mistakes.
-  - |
-    Support multiple integration levels with progressive depth.
+  - Use examples/engines.ts for scoring and pitfalls
+  - Prefer WharfKit session patterns over custom key extraction
+  - Do not freeze specific Ledger API versions as eternal truth
 
 technical_requirements:
   framework: Next.js 15 + TypeScript (strict)
-  styling: Tailwind + shadcn/ui + framer-motion
-  hardware: Ledger libraries + WharfKit patterns
-  visualization: Embedded PermissionTree where helpful
-  design_system: pixel-journey-design-system
-
-best_practices:
-  - Always use the correct permission for the operation (owner vs active)
-  - Provide clear, step-by-step guidance during setup and signing
-  - Never expose private keys during integration
-  - Design good multi-sig structures when combining with hardware wallets
-  - Test the full user flow, including error states
-  - Prioritize both security and usability
-
-future_extensions:
-  - Advanced multi-sig + hardware wallet patterns
-  - Hardware wallet recovery flows
-  - Integration with social recovery mechanisms
-  - Batch management for multiple accounts
+  styling: Tailwind CSS
+  signing: WharfKit + vendor transports (app-pinned versions)
