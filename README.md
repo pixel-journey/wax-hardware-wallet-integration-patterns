@@ -1,175 +1,122 @@
-# wax-hardware-wallet-integration-patterns — Hardware Wallet Integration Patterns
+# wax-hardware-wallet-integration-patterns
 
-> **Status:** 🔄 In Active Development (Pixel Journey Standard)  
-> **Category:** Security & Hardware Wallets (Core Antelope/WAX)  
+> **Status:** 🔄 Deep Refinement (PX Perfection Standard v1.1)  
+> **Category:** Security & Hardware Wallets  
 > **Parent Catalog:** [wax-ecosystem-blueprint-catalog](https://github.com/pixel-journey/wax-ecosystem-blueprint-catalog)
 
-**Goal:** Provide a high-quality, educational, and practical reference for integrating hardware wallets with Antelope/WAX accounts — covering permission management, secure signing flows, best practices, and common pitfalls.
-
-This guide helps developers and users integrate hardware wallets confidently and securely.
+**Goal:** Educational, practical patterns for integrating **hardware wallets** with Antelope/WAX accounts — permission design, signing UX, multi-sig co-signer use, and common pitfalls. Device SDKs change; **invariants and UX principles** are the durable layer.
 
 ---
 
-## Vision & Long-Term Participation Mindset
+## Vision
 
-Hardware wallets dramatically improve account security, but integration with Antelope chains can be complex. Poor integration leads to friction, mistakes, or even security regressions.
+Hardware wallets reduce software-key exposure. Bad integration reintroduces risk (wrong permission, unclear prompts, keys handled in the browser). This blueprint focuses on:
 
-This blueprint provides clear patterns, code examples, and best practices so developers and users can integrate hardware wallets confidently and securely.
-
-We build this for long-term participants who want their account security practices to be both strong and usable.
-
----
-
-## Quick Start
-
-**For Human Developers**
-1. Read the Educational Core and Architecture sections.
-2. Review the Integration Guide and Best Practices.
-3. Use the patterns in your own projects.
-
-**For AI Agents & AI-Assisted Development**
-- Start with `spec.yaml` for structured machine instructions.
-- Use the permission and signing patterns as high-quality context.
+- **Owner vs active** discipline
+- **Clear device prompts** users can actually read
+- **Multi-sig + hardware** without single-device fantasy security
+- **Runbooks** that work if a dApp domain disappears (PX §11)
 
 ---
 
-## 1. Educational Core — Why Hardware Wallet Integration Matters
+## Quick Starts
 
-Hardware wallets dramatically improve account security, but integration with Antelope chains can be complex.
+### Humans
+1. Read §1 (permission + signing pitfalls).
+2. Use `/examples` — readiness score, pitfalls, signing steps, permission patterns, demo.
+3. Pair with multi-sig and social-recovery blueprints for high-value accounts.
 
-### Key Concepts
-
-| Concept                        | Description                                              | Why It Matters                              |
-|--------------------------------|----------------------------------------------------------|---------------------------------------------|
-| Permission model interaction   | How hardware wallets work with owner vs active           | Critical for correct and secure usage       |
-| Signing flows                  | Differences between hardware and software wallet signing | Affects UX and security                     |
-| Secure permission design       | Recommended structures when using hardware wallets       | Maximizes security benefits                 |
-| Common pitfalls                | Exposing keys, poor UX, insecure patterns                | Prevents security regressions               |
-
-### Common Pitfalls
-
-| Pitfall                              | Risk                                      | How This Guide Helps                          |
-|--------------------------------------|-------------------------------------------|-----------------------------------------------|
-| Using active permission for everything | Reduced security                          | Clear guidance on proper permission use       |
-| Poor UX during signing               | Users abandon hardware wallets            | Step-by-step flows with visual guidance       |
-| Exposing private keys during setup   | Security breach                           | Strong emphasis on secure patterns            |
-| Ignoring multi-sig + hardware combos | Weak governance                           | Specific patterns for multi-sig + hardware    |
-
-### Learning Outcomes
-
-After studying this repository, you should be able to:
-- Integrate hardware wallets securely with WAX/Antelope dApps
-- Design good permission structures for hardware wallet users
-- Avoid common integration mistakes
-- Build smooth, trustworthy signing experiences
+### AI agents
+1. Load `spec.yaml`.
+2. Use pure readiness helpers; do not invent device APIs as permanent contracts.
+3. Prefer WharfKit session patterns over custom key extraction.
 
 ---
 
-## 2. Architecture & Design Decisions
+## 1. Educational Core
 
-### Recommended Tech Stack
+### 1.1 Concepts
 
-- **Framework**: Next.js 15 + TypeScript (strict)
-- **UI**: Tailwind + shadcn/ui + framer-motion
-- **State**: Jotai or Zustand
-- **Hardware Integration**: Ledger libraries + WharfKit patterns
-- **Visualization**: Embedded PermissionTree where helpful
-- **Design System**: Pixel Journey Design System
+| Concept | Why it matters |
+|---------|----------------|
+| **Hardware holds keys** | Signing happens on device; host should not see seed |
+| **Owner vs active** | Owner changes authority; active runs daily ops |
+| **WharfKit / wallet session** | Standard path for Antelope dApps |
+| **Co-signer in multi-sig** | Device is one weight, not magic immunity |
+| **Prompt literacy** | Users must understand what the device shows |
 
-### Core Component Architecture
+### 1.2 Common pitfalls
+
+| Pitfall | Risk | Direction |
+|---------|------|-----------|
+| Daily use of owner on device | One compromised flow can change authority | Keep owner rare/offline |
+| Opaque signing UI | Users approve blindly | Show action summary before device |
+| "Hardware" but keys exported once | Defeats the model | Never export seed into the page |
+| Single hardware as only path | Device loss = lockout | Backup + multi-sig design |
+| Relying only on a vendor tutorial site | Site can vanish | Keep setup steps in your repo |
+
+### 1.3 Learning outcomes
+
+- Design permission layouts for hardware users
+- Implement calm, step-by-step signing UX
+- Score integration readiness with a checklist
+- Combine hardware with multi-sig without false confidence
+
+---
+
+## 2. Architecture
+
+| Layer | Choice |
+|-------|--------|
+| Framework | Next.js 15 + TypeScript (strict) |
+| Logic | Pure readiness / pitfall helpers |
+| UI | Guide panels + signing step list |
+| Runtime | WharfKit + vendor transports (version carefully) |
 
 ```
-/components/
-  SetupGuide.tsx
-  SigningFlow.tsx
-  PermissionPatterns.tsx
+/examples/
+  types.ts
+  engines.ts
   PitfallsGuide.tsx
-```
-
-### Key Design Decisions
-
-- Strong emphasis on secure-by-default patterns
-- Clear visual guidance for complex flows
-- Reusable permission and signing patterns
-- Educational focus alongside practical code
-
----
-
-## 3. Integration Guide
-
-### How to Integrate This Pattern
-
-1. Follow recommended permission structures for hardware wallet users
-2. Implement secure signing flows with clear UX
-3. Add proper error handling and user guidance
-4. Apply best practices for multi-sig + hardware combinations
-
-### Integration Levels
-
-- **Minimal**: Basic signing flow with simple permission handling
-- **Recommended**: Full patterns with permission design, UX guidance, and safety checks
-- **Advanced**: Advanced multi-sig + hardware patterns, custom flows
-
----
-
-## 4. Best Practices
-
-- Always use the correct permission for the operation (owner vs active)
-- Provide clear, step-by-step guidance during setup and signing
-- Never expose private keys during integration
-- Design good multi-sig structures when combining with hardware wallets
-- Test the full user flow, including error states
-- Prioritize both security and usability
-
----
-
-## 5. Code Examples
-
-### Basic Signing Flow Concept
-
-```ts
-// Conceptual signing flow with hardware wallet
-async function signWithHardware(session: any, transaction: any) {
-  // Use WharfKit + Ledger transport
-  // Return signed transaction
-}
+  ReadinessChecklist.tsx
+  SigningFlowSteps.tsx
+  PermissionPatterns.tsx
+  demo.tsx
 ```
 
 ---
 
-## 6. Machine Instructions (For AI Agents)
+## 3. Integration levels
 
-See `spec.yaml` for structured instructions.
-
-Key instructions:
-- Create step-by-step hardware wallet setup guide
-- Implement secure signing flow examples with WharfKit
-- Document recommended permission patterns for hardware wallets
-- Add clear warnings for common integration mistakes
+| Level | Scope |
+|-------|--------|
+| **Minimal** | Session connect + sign one action with clear copy |
+| **Recommended** | Permission guidance + readiness checklist + error states |
+| **Advanced** | Multi-sig weights with hardware co-signers, owner rotation drill |
 
 ---
 
-## 7. Ecosystem Position
+## 4. Best practices
 
-Direct companion to:
-- `wax-permission-visualizer-and-editor`
-- `wax-safe-key-rotation-assistant`
+**Do** use the minimum permission required; preview txs; test disconnect and cancel paths.  
+**Don’t** paste seeds into web forms; don’t treat one Ledger as a full backup plan.
+
+---
+
+## 5. Ecosystem position
+
+Companion to:
 - `wax-secure-key-management-and-privacy-tools`
-
-Essential reference for any serious security-focused tooling on Antelope chains.
-
-Builds on the foundational layer:
-- `pixel-journey-standards`
-- `gitbook-docs`
-- `pixel-journey-templates`
-- `wax-ecosystem-blueprint-catalog`
+- `wax-multi-sig-proposal-builder-and-simulator`
+- `wax-social-recovery-and-key-backup-tools`
+- `wax-safe-key-rotation-assistant`
 
 ---
 
-## 8. License & Credits
+## 6. License
 
-MIT License
+MIT — **Pixel Journey**
 
-Pixel Journey — Educational, practical, and beautiful interfaces for public blockchain infrastructure.
+*Exemplifies [PX Perfection Standard](https://github.com/pixel-journey/wax-ecosystem-blueprint-catalog/blob/main/PX-PERFECTION-STANDARD.md) v1.1.*
 
-*Last updated: July 2026*
+*Last major refinement pass: October 2026*
