@@ -1,15 +1,16 @@
 # VERIFICATION-LOG — wax-hardware-wallet-integration-patterns
 
 **Trust label:** `educational-reference`  
-**Updated:** 2026-10-20 (Pass 1)
+**Updated:** 2026-10-20 (Pass 2)
 
 | Claim | Status | Evidence |
 |-------|--------|----------|
-| scoreHardwareReadiness 0–100 | **verified** (unit) | `engines.test.ts` |
-| seed-in-browser high pitfall | **verified** (unit) | same |
-| Interactive posture UI | **partial** | `app/page.tsx` |
-| Real device / WharfKit transport | **out of scope** Pass 1 | optional peers later |
+| scoreHardwareReadiness / pitfalls | **verified** (unit) | `engines.test.ts` |
+| SIGNING_ERROR_MATRIX completeness | **verified** (unit) | `errorMatrix.test.ts` |
+| Dry-run session | **partial** | `createDryRunSession` local only |
+| Real WharfKit / Ledger | **optional** | dynamic import; peers not required |
+| Related blueprint links | **partial** | `RelatedBlueprints.tsx` |
 
 ```bash
-npm install && npm test && npm run typecheck
+npm test && npm run typecheck
 ```
