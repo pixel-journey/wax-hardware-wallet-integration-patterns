@@ -2,10 +2,10 @@
 
 > **Trust Label:** `educational-reference`  
 > **Verification:** [VERIFICATION-LOG.md](VERIFICATION-LOG.md)  
-> **Status:** 🔄 Pass 1 — readiness engines + interactive app  
+> **Status:** 🔄 Pass 2 — error matrix + dry-run session sketch  
 > **Parent Catalog:** [wax-ecosystem-blueprint-catalog](https://github.com/pixel-journey/wax-ecosystem-blueprint-catalog)
 
-Educational patterns for **hardware wallet** integration on Antelope/WAX — permission discipline, signing UX, and readiness scoring. Device SDKs change; invariants are the durable layer.
+Educational hardware wallet integration patterns for Antelope/WAX.
 
 ## Quick start
 
@@ -13,32 +13,23 @@ Educational patterns for **hardware wallet** integration on Antelope/WAX — per
 npm install && npm test && npm run dev
 ```
 
-```ts
-import { scoreHardwareReadiness, analyzeHardwarePitfalls } from "./examples/engines";
+## Pass 2 surface
 
-const posture = {
-  noSeedInBrowser: true,
-  ownerNotUsedDaily: true,
-  clearTxPreview: true,
-  secondaryRecoveryPath: true,
-  errorPathsHandled: true,
-};
+| Piece | Role |
+|-------|------|
+| Readiness engines | Checklist score + structural pitfalls |
+| `SIGNING_ERROR_MATRIX` | Cancel, disconnect, timeout, wrong-chain, blind-sign |
+| `SessionSketchPanel` | Dry-run first; optional WharfKit login |
+| Related blueprints | Social recovery, multi-sig, resilience |
 
-scoreHardwareReadiness(posture);
-analyzeHardwarePitfalls(posture);
+Optional peers for real wallet UI:
+
+```bash
+npm i @wharfkit/session @wharfkit/web-renderer @wharfkit/wallet-plugin-anchor
+# optional: @wharfkit/wallet-plugin-ledger
 ```
 
-## Core checks
-
-| Check | Why |
-|-------|-----|
-| No seed in browser | Isolation is the product |
-| Owner not daily | Authority-change blast radius |
-| Clear tx preview | Match UI to device screen |
-| Secondary recovery | Device loss is expected |
-| Error paths | Cancel / disconnect / timeout |
-
-Pair with `wax-social-recovery-and-key-backup-tools` and multi-sig blueprints.
+**Never** paste seeds into the page.
 
 ## License
 
