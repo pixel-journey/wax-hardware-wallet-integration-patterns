@@ -30,9 +30,13 @@ export function PitfallsGuide({ posture, className = "" }: PitfallsGuideProps) {
       <p className="text-sm text-white/60 mb-4">
         Structural flags from the same posture answers.
       </p>
-      <ul className="space-y-3">
+      <ul className="space-y-3" aria-live="polite">
         {pitfalls.map((p) => (
-          <li key={p.id} className={`rounded-xl border p-3 text-sm ${levelClass[p.level]}`}>
+          <li
+            key={p.id}
+            className={`rounded-xl border p-3 text-sm ${levelClass[p.level]}`}
+            role={p.level === "high" ? "alert" : undefined}
+          >
             <div className="flex justify-between gap-2">
               <span className="font-medium">{p.title}</span>
               <span className="text-xs uppercase opacity-80">{p.level}</span>
