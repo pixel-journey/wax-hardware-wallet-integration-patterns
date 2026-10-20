@@ -1,17 +1,21 @@
 'use client';
 
-import React, { useId, useMemo, useState } from 'react';
+import React, { useEffect, useId, useMemo, useState } from 'react';
+import { ErrorCoveragePanel } from '../examples/ErrorCoveragePanel';
 import { ErrorMatrixPanel } from '../examples/ErrorMatrixPanel';
+import { PermissionDiagram } from '../examples/PermissionDiagram';
 import { PermissionPatterns } from '../examples/PermissionPatterns';
 import { PitfallsGuide } from '../examples/PitfallsGuide';
 import { ReadinessChecklist } from '../examples/ReadinessChecklist';
 import { RelatedBlueprints } from '../examples/RelatedBlueprints';
+import { RotationDrillPanel } from '../examples/RotationDrillPanel';
 import { SessionSketchPanel } from '../examples/SessionSketchPanel';
 import { SigningFlowSteps } from '../examples/SigningFlowSteps';
 import {
   analyzeHardwarePitfalls,
   scoreHardwareReadiness,
 } from '../examples/engines';
+import { errorPathsHandledFromIds } from '../examples/rotationDrill';
 import type { HardwareIntegrationPosture } from '../examples/types';
 
 const FIELDS: {
@@ -34,6 +38,14 @@ export default function HardwareWalletPage() {
     secondaryRecoveryPath: false,
     errorPathsHandled: false,
   });
+  const [handledErrorIds, setHandledErrorIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    const ok = errorPathsHandledFromIds(handledErrorIds);
+    setPosture((p) =>
+      p.errorPathsHandled === ok ? p : { ...p, errorPathsHandled: ok }
+    );
+  }, [handledErrorIds]);
 
   const readiness = useMemo(() => scoreHardwareReadiness(posture), [posture]);
   const pitfalls = useMemo(() => analyzeHardwarePitfalls(posture), [posture]);
@@ -50,10 +62,12 @@ export default function HardwareWalletPage() {
             HARDWARE WALLET PATTERNS
           </h1>
           <p className="text-sm opacity-60 mt-2 max-w-xl">
-            Readiness scoring, signing error matrix, dry-run session sketch. Never
-            paste seeds into the page.
+            Readiness, hot/cold diagram, rotation drill, error coverage mapped to
+            posture. Never paste seeds.
           </p>
         </header>
+
+        <PermissionDiagram />
 
         <section
           className="border border-white/10 rounded-2xl bg-black/40 p-5 space-y-4"
@@ -95,17 +109,27 @@ export default function HardwareWalletPage() {
                 aria-describedby={scoreId}
               />
               {label}
+              {key === 'errorPathsHandled' && (
+                <span className="text-[10px] opacity-40">(auto from coverage)</span>
+              )}
             </label>
           ))}
 
           <ReadinessChecklist posture={posture} />
         </section>
 
+        <ErrorCoveragePanel
+          handledIds={handledErrorIds}
+          onChange={setHandledErrorIds}
+        />
+
         <PitfallsGuide posture={posture} />
 
         <SessionSketchPanel />
 
         <ErrorMatrixPanel />
+
+        <RotationDrillPanel />
 
         <SigningFlowSteps />
 
@@ -114,8 +138,8 @@ export default function HardwareWalletPage() {
         <RelatedBlueprints />
 
         <p className="text-xs opacity-50">
-          <code className="text-emerald-400/80">scoreHardwareReadiness</code> ·{' '}
-          <code className="text-emerald-400/80">SIGNING_ERROR_MATRIX</code> ·{' '}
+          <code className="text-emerald-400/80">scoreRotationDrill</code> ·{' '}
+          <code className="text-emerald-400/80">errorPathsHandledFromIds</code> ·{' '}
           <code className="text-emerald-400/80">createDryRunSession</code>
         </p>
       </div>
