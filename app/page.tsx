@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useId, useMemo, useState } from 'react';
+import { ErrorMatrixPanel } from '../examples/ErrorMatrixPanel';
 import { PermissionPatterns } from '../examples/PermissionPatterns';
 import { PitfallsGuide } from '../examples/PitfallsGuide';
 import { ReadinessChecklist } from '../examples/ReadinessChecklist';
+import { RelatedBlueprints } from '../examples/RelatedBlueprints';
+import { SessionSketchPanel } from '../examples/SessionSketchPanel';
 import { SigningFlowSteps } from '../examples/SigningFlowSteps';
 import {
   analyzeHardwarePitfalls,
@@ -47,8 +50,8 @@ export default function HardwareWalletPage() {
             HARDWARE WALLET PATTERNS
           </h1>
           <p className="text-sm opacity-60 mt-2 max-w-xl">
-            Educational readiness scoring and integration pitfalls for Antelope/WAX.
-            Device SDKs change — invariants and UX principles stay.
+            Readiness scoring, signing error matrix, dry-run session sketch. Never
+            paste seeds into the page.
           </p>
         </header>
 
@@ -100,17 +103,20 @@ export default function HardwareWalletPage() {
 
         <PitfallsGuide posture={posture} />
 
+        <SessionSketchPanel />
+
+        <ErrorMatrixPanel />
+
         <SigningFlowSteps />
 
         <PermissionPatterns />
 
+        <RelatedBlueprints />
+
         <p className="text-xs opacity-50">
-          Engines:{' '}
           <code className="text-emerald-400/80">scoreHardwareReadiness</code> ·{' '}
-          <code className="text-emerald-400/80">analyzeHardwarePitfalls</code>
-        </p>
-        <p className="text-[10px] opacity-40">
-          Pair with social-recovery and multi-sig blueprints for high-value accounts.
+          <code className="text-emerald-400/80">SIGNING_ERROR_MATRIX</code> ·{' '}
+          <code className="text-emerald-400/80">createDryRunSession</code>
         </p>
       </div>
     </div>
