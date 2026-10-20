@@ -1,16 +1,16 @@
 # VERIFICATION-LOG — wax-hardware-wallet-integration-patterns
 
 **Trust label:** `educational-reference`  
-**Updated:** 2026-10-20 (Pass 3)
+**Updated:** 2026-10-20 (Pass 4 — complete)
 
 | Claim | Status | Evidence |
 |-------|--------|----------|
-| Readiness / pitfalls engines | **verified** (unit) | `engines.test.ts` |
-| Error matrix | **verified** (unit) | `errorMatrix.test.ts` |
-| scoreRotationDrill | **verified** (unit) | `rotationDrill.test.ts` |
-| errorPathsHandledFromIds | **verified** (unit) | same |
-| Permission diagram UI | **partial** | educational only |
-| Live device firmware tests | **out of scope** | optional peers |
+| scoreHardwareReadiness / pitfalls | **verified** (unit) | `engines.test.ts` |
+| SIGNING_ERROR_MATRIX | **verified** (unit) | `errorMatrix.test.ts` |
+| scoreRotationDrill / errorPathsHandledFromIds | **verified** (unit) | `rotationDrill.test.ts` |
+| Dry-run session | **partial** | local `createDryRunSession` |
+| Real Ledger/firmware | **out of scope** | optional WharfKit peers |
+| a11y high pitfalls | **partial** | `role="alert"` + live region |
 
 ```bash
 npm test && npm run typecheck
