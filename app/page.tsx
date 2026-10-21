@@ -1,22 +1,22 @@
 'use client';
 
 import React, { useEffect, useId, useMemo, useState } from 'react';
-import { ErrorCoveragePanel } from '../examples/ErrorCoveragePanel';
-import { ErrorMatrixPanel } from '../examples/ErrorMatrixPanel';
-import { PermissionDiagram } from '../examples/PermissionDiagram';
-import { PermissionPatterns } from '../examples/PermissionPatterns';
-import { PitfallsGuide } from '../examples/PitfallsGuide';
-import { ReadinessChecklist } from '../examples/ReadinessChecklist';
-import { RelatedBlueprints } from '../examples/RelatedBlueprints';
-import { RotationDrillPanel } from '../examples/RotationDrillPanel';
-import { SessionSketchPanel } from '../examples/SessionSketchPanel';
-import { SigningFlowSteps } from '../examples/SigningFlowSteps';
+import { ErrorCoveragePanel } from '../src/ErrorCoveragePanel';
+import { ErrorMatrixPanel } from '../src/ErrorMatrixPanel';
+import { PermissionDiagram } from '../src/PermissionDiagram';
+import { PermissionPatterns } from '../src/PermissionPatterns';
+import { PitfallsGuide } from '../src/PitfallsGuide';
+import { ReadinessChecklist } from '../src/ReadinessChecklist';
+import { RelatedBlueprints } from '../src/RelatedBlueprints';
+import { RotationDrillPanel } from '../src/RotationDrillPanel';
+import { SessionSketchPanel } from '../src/SessionSketchPanel';
+import { SigningFlowSteps } from '../src/SigningFlowSteps';
 import {
   analyzeHardwarePitfalls,
   scoreHardwareReadiness,
-} from '../examples/engines';
-import { errorPathsHandledFromIds } from '../examples/rotationDrill';
-import type { HardwareIntegrationPosture } from '../examples/types';
+} from '../src/engines';
+import { errorPathsHandledFromIds } from '../src/rotationDrill';
+import type { HardwareIntegrationPosture } from '../src/types';
 
 const FIELDS: {
   key: keyof HardwareIntegrationPosture;

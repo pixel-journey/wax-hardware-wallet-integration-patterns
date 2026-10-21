@@ -16,6 +16,6 @@
     "plugins": [{ "name": "next" }],
     "paths": { "@/*": ["./*"] }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "src/wharf/optional-modules.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

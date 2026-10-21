@@ -31,7 +31,7 @@ features:
     - ReadinessChecklist, PitfallsGuide, SigningFlowSteps, PermissionPatterns, demo
 
 machine_instructions:
-  - Use examples/engines.ts for scoring and pitfalls
+  - Use src/engines.ts for scoring and pitfalls
   - Prefer WharfKit session patterns over custom key extraction
   - Do not freeze specific Ledger API versions as eternal truth
 
