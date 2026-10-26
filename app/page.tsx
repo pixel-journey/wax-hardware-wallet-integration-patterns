@@ -23,6 +23,10 @@ import {
   savePosture,
 } from '../src/postureStorage';
 import { errorPathsHandledFromIds } from '../src/rotationDrill';
+import {
+  buildShareSearchParam,
+  decodePosture,
+} from '../src/sharePosture';
 import type { HardwareIntegrationPosture } from '../src/types';
 
 const FIELDS: {
@@ -49,6 +53,18 @@ export default function HardwareWalletPage() {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const q = new URLSearchParams(window.location.search).get('hw');
+      if (q) {
+        const shared = decodePosture(q);
+        if (shared) {
+          setPosture(shared);
+          setMessage('Loaded posture from share URL');
+          window.history.replaceState({}, '', window.location.pathname);
+          return;
+        }
+      }
+    }
     const loaded = loadPosture();
     if (loaded.ok && loaded.value) {
       setPosture(loaded.value);
@@ -76,6 +92,20 @@ export default function HardwareWalletPage() {
     }
   };
 
+  const copyShare = async () => {
+    const param = buildShareSearchParam(posture);
+    const url =
+      typeof window !== 'undefined'
+        ? `${window.location.origin}${window.location.pathname}?${param}`
+        : `?${param}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setMessage('Share URL copied');
+    } catch {
+      setMessage('Clipboard unavailable');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white p-6">
       <div className="max-w-3xl mx-auto space-y-8">
@@ -87,8 +117,8 @@ export default function HardwareWalletPage() {
             HARDWARE WALLET PATTERNS
           </h1>
           <p className="text-sm opacity-60 mt-2 max-w-xl">
-            Readiness, hot/cold diagram, rotation drill, key probe, confirm-gated
-            WharfKit. Never paste seeds.
+            Readiness, key probe, rotation drill, confirm-gated WharfKit. Never
+            paste seeds.
           </p>
         </header>
 
@@ -150,6 +180,13 @@ export default function HardwareWalletPage() {
             </button>
             <button
               type="button"
+              className="px-3 py-2 rounded-lg text-sm bg-emerald-800"
+              onClick={() => void copyShare()}
+            >
+              Copy share URL
+            </button>
+            <button
+              type="button"
               className="px-3 py-2 rounded-lg text-sm bg-violet-700"
               onClick={() => {
                 const r = savePosture(posture);
@@ -201,7 +238,7 @@ export default function HardwareWalletPage() {
         )}
 
         <p className="text-xs opacity-50">
-          Pass 6–8 · educational-reference · never paste seeds
+          Passes 1–10 complete · educational-reference · never paste seeds
         </p>
       </div>
     </div>

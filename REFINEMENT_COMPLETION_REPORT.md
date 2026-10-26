@@ -1,12 +1,15 @@
-# Refinement — hardware wallet through Pass 8
+# Hardware wallet patterns — complete through Pass 10
+
+**Updated:** 2026-10-26
 
 | Pass | Scope |
 |------|--------|
-| 1–4 | Education core |
-| 5 | Chain id fix, probe engines, export, SessionKit soft-fail |
-| **6–8** | KeyProbePanel UI, export/save posture, confirm-gated live session, EDUCATION/DEPLOY |
+| 1–4 | Core education |
+| 5 | Chain id, probe engines, export |
+| 6–8 | UI probe, confirm-gated session, drafts |
+| **9–10** | Share URL, Tailwind, next.config — **freeze** |
 
-Near multi-sig parity for this topic. Optional: Tailwind formalization, share URL for posture.
+Out of scope: vendor firmware SDK, CI mainnet broadcast.
 
 ```bash
 npm install && npm test && npm run build

@@ -1,17 +1,15 @@
-import { Cases } from "../src/Cases";
 import type { ReactNode } from "react";
+import "./globals.css";
 
 export const metadata = {
-  title: "Hardware Wallet Patterns · Pixel Journey",
-  description:
-    "Educational hardware wallet integration patterns for WAX/Antelope",
+  title: "Hardware wallet patterns · Pixel Journey",
+  description: "Educational hardware wallet integration patterns for WAX",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-black text-white antialiased">{children}
-        <Cases /></body>
+      <body className="bg-[#0a0a0a] text-white antialiased">{children}</body>
     </html>
   );
 }
