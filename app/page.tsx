@@ -3,6 +3,7 @@
 import React, { useEffect, useId, useMemo, useState } from 'react';
 import { ErrorCoveragePanel } from '../src/ErrorCoveragePanel';
 import { ErrorMatrixPanel } from '../src/ErrorMatrixPanel';
+import { KeyProbePanel } from '../src/KeyProbePanel';
 import { PermissionDiagram } from '../src/PermissionDiagram';
 import { PermissionPatterns } from '../src/PermissionPatterns';
 import { PitfallsGuide } from '../src/PitfallsGuide';
@@ -15,6 +16,12 @@ import {
   analyzeHardwarePitfalls,
   scoreHardwareReadiness,
 } from '../src/engines';
+import { exportReadinessMarkdown } from '../src/exportReport';
+import {
+  clearPosture,
+  loadPosture,
+  savePosture,
+} from '../src/postureStorage';
 import { errorPathsHandledFromIds } from '../src/rotationDrill';
 import type { HardwareIntegrationPosture } from '../src/types';
 
@@ -39,6 +46,15 @@ export default function HardwareWalletPage() {
     errorPathsHandled: false,
   });
   const [handledErrorIds, setHandledErrorIds] = useState<string[]>([]);
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loaded = loadPosture();
+    if (loaded.ok && loaded.value) {
+      setPosture(loaded.value);
+      setMessage('Restored posture draft');
+    }
+  }, []);
 
   useEffect(() => {
     const ok = errorPathsHandledFromIds(handledErrorIds);
@@ -51,6 +67,15 @@ export default function HardwareWalletPage() {
   const pitfalls = useMemo(() => analyzeHardwarePitfalls(posture), [posture]);
   const highCount = pitfalls.filter((p) => p.level === 'high').length;
 
+  const copyExport = async () => {
+    try {
+      await navigator.clipboard.writeText(exportReadinessMarkdown(posture));
+      setMessage('Readiness markdown copied');
+    } catch {
+      setMessage('Clipboard unavailable');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white p-6">
       <div className="max-w-3xl mx-auto space-y-8">
@@ -62,8 +87,8 @@ export default function HardwareWalletPage() {
             HARDWARE WALLET PATTERNS
           </h1>
           <p className="text-sm opacity-60 mt-2 max-w-xl">
-            Readiness, hot/cold diagram, rotation drill, error coverage mapped to
-            posture. Never paste seeds.
+            Readiness, hot/cold diagram, rotation drill, key probe, confirm-gated
+            WharfKit. Never paste seeds.
           </p>
         </header>
 
@@ -115,8 +140,40 @@ export default function HardwareWalletPage() {
             </label>
           ))}
 
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              className="px-3 py-2 rounded-lg text-sm bg-sky-700"
+              onClick={() => void copyExport()}
+            >
+              Copy readiness markdown
+            </button>
+            <button
+              type="button"
+              className="px-3 py-2 rounded-lg text-sm bg-violet-700"
+              onClick={() => {
+                const r = savePosture(posture);
+                setMessage(r.ok ? 'Posture saved' : r.reason ?? 'save failed');
+              }}
+            >
+              Save draft
+            </button>
+            <button
+              type="button"
+              className="px-3 py-2 rounded-lg text-sm bg-white/10"
+              onClick={() => {
+                clearPosture();
+                setMessage('Draft cleared');
+              }}
+            >
+              Clear draft
+            </button>
+          </div>
+
           <ReadinessChecklist posture={posture} />
         </section>
+
+        <KeyProbePanel />
 
         <ErrorCoveragePanel
           handledIds={handledErrorIds}
@@ -137,10 +194,14 @@ export default function HardwareWalletPage() {
 
         <RelatedBlueprints />
 
+        {message && (
+          <p className="text-xs text-emerald-200/80" role="status">
+            {message}
+          </p>
+        )}
+
         <p className="text-xs opacity-50">
-          <code className="text-emerald-400/80">scoreRotationDrill</code> ·{' '}
-          <code className="text-emerald-400/80">errorPathsHandledFromIds</code> ·{' '}
-          <code className="text-emerald-400/80">createDryRunSession</code>
+          Pass 6–8 · educational-reference · never paste seeds
         </p>
       </div>
     </div>

@@ -1,13 +1,12 @@
-# Refinement — hardware wallet patterns
-
-**Updated:** 2026-10-26
+# Refinement — hardware wallet through Pass 8
 
 | Pass | Scope |
 |------|--------|
-| 1–4 | Education UI + engines |
-| **5** | Fixed WAX chain id; `probeAccountKeys`; readiness markdown export; SessionKit soft-fail; CI; POLICY |
+| 1–4 | Education core |
+| 5 | Chain id fix, probe engines, export, SessionKit soft-fail |
+| **6–8** | KeyProbePanel UI, export/save posture, confirm-gated live session, EDUCATION/DEPLOY |
 
-Next: wire probe into UI panel, confirm-gated live dry-run vs real toggle.
+Near multi-sig parity for this topic. Optional: Tailwind formalization, share URL for posture.
 
 ```bash
 npm install && npm test && npm run build

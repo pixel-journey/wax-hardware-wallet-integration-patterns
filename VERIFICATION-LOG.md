@@ -1,11 +1,9 @@
 # Verification Log
 
-**Updated:** 2026-10-26 (Pass 5)
+**Updated:** 2026-10-26 (Pass 8)
 
 | Claim | Status |
 | --- | --- |
-| Engines / matrix / drill | existing unit tests |
-| exportReadinessMarkdown | exportReport.test.ts |
-| summarizeOwnerKeys | accountKeyProbe.test.ts |
-| WAX chain id | sessionFactory constant |
+| Engines / probe / export | unit tests |
+| Live session.transact | confirm-gated UI — host only |
 | CI | test + typecheck + build |
