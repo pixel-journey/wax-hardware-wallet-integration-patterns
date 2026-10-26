@@ -1,41 +1,24 @@
 # wax-hardware-wallet-integration-patterns
 
-> **Trust Label:** `educational-reference`  
-> **Verification:** [VERIFICATION-LOG.md](VERIFICATION-LOG.md)  
-> **Status:** ✅ Pass 4 complete  
-> **Parent Catalog:** [wax-ecosystem-blueprint-catalog](https://github.com/pixel-journey/wax-ecosystem-blueprint-catalog)
+> **Trust label:** `educational-reference`  
+> **Status:** Passes **1–4** education + **Pass 5** WharfKit/probe/export (2026-10-26)
 
-Educational **hardware wallet** integration patterns for Antelope/WAX — readiness scoring, signing UX, error matrix, owner rotation drill, hot/cold permission model.
-
-## Quick start
+Educational **hardware wallet** patterns for WAX/Antelope: readiness scoring, signing UX, error matrix, owner rotation drill, hot/cold model.
 
 ```bash
 npm install && npm test && npm run dev
 ```
 
-```ts
-import { scoreHardwareReadiness } from "./src/engines";
-import { scoreRotationDrill } from "./src/rotationDrill";
-import { createDryRunSession } from "./src/wharf/sessionFactory";
-```
-
-## Surface
-
 | Layer | Features |
 |-------|----------|
-| Pure engines | Readiness, pitfalls, rotation drill, error matrix |
-| Session | Dry-run first; optional WharfKit peers |
-| UI | Diagram, coverage→posture, drill, signing steps |
-| Docs | Related social-recovery / multi-sig / PX §11 |
+| Pure | Readiness, pitfalls, rotation drill, error matrix, markdown export |
+| Probe | Soft-fail `get_account` key summary for owner/active |
+| Session | Dry-run + optional WharfKit (**Anchor**; Ledger optional) |
 
 **Never** paste seeds into the page. Practice owner rotation on throwaway accounts.
 
-## License
+Correct WAX mainnet chain id is used in SessionKit bootstrap.
 
-MIT — **Pixel Journey**
+[POLICY.md](./POLICY.md) · [ARCHITECTURE.md](./ARCHITECTURE.md)
 
-## Queries and unsigned transactions
-
-`src/api.ts` builds the HTTP requests. `src/usecases.ts` is the worked case: those requests, and an unsigned transaction when this repo already has an action or the chain action is the standard Antelope one for the topic. `executed` is false. Nothing is sent.
-
-The code used to sit in `examples/`. GitHub treats that directory as documentation, so the language bar hid the TypeScript.
+MIT — Pixel Journey

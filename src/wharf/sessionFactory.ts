@@ -1,17 +1,14 @@
 /**
- * Optional WharfKit SessionKit bootstrap for hardware paths.
- *
- * Install when ready:
- *   npm i @wharfkit/session @wharfkit/web-renderer \
- *         @wharfkit/wallet-plugin-anchor @wharfkit/wallet-plugin-ledger
- *
- * Dynamic import keeps the blueprint install-light.
+ * WharfKit SessionKit bootstrap for hardware-friendly paths.
+ * Prefer Anchor (often bridges Ledger). Optional Ledger plugin if installed.
+ * Dynamic import keeps education install-light.
  */
 
 import type { SessionLike } from "./types";
 
+/** WAX mainnet chain id (Antelope). */
 export const WAX_MAINNET_CHAIN_ID =
-  "1064487b3cd1a897ce03ae5b6a865651747e2e15209765797e784ba3fbf3c7ac";
+  "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4";
 
 export interface CreateSessionKitOptions {
   appName?: string;
@@ -22,53 +19,56 @@ export interface CreateSessionKitOptions {
 export interface SessionKitLike {
   login(): Promise<{ session: SessionLike }>;
   logout?(session?: SessionLike): Promise<void>;
+  restore?(): Promise<SessionLike | undefined>;
 }
 
 export async function createSessionKit(
   options: CreateSessionKitOptions = {}
-): Promise<SessionKitLike> {
-  const appName = options.appName ?? "Pixel Journey Hardware Patterns";
+): Promise<
+  | { ok: true; kit: SessionKitLike; wallets: string[] }
+  | { ok: false; reason: string }
+> {
+  const appName = options.appName ?? "pxj-hardware-patterns";
   const rpcUrl = options.rpcUrl ?? "https://wax.greymass.com";
   const chainId = options.chainId ?? WAX_MAINNET_CHAIN_ID;
 
   try {
-    const [{ SessionKit }, { WebRenderer }, anchorMod] = await Promise.all([
-      import("@wharfkit/session"),
-      import("@wharfkit/web-renderer"),
-      import("@wharfkit/wallet-plugin-anchor"),
-    ]);
+    const [{ SessionKit }, { WebRenderer }, { WalletPluginAnchor }] =
+      await Promise.all([
+        import("@wharfkit/session"),
+        import("@wharfkit/web-renderer"),
+        import("@wharfkit/wallet-plugin-anchor"),
+      ]);
 
-    const WalletPluginAnchor = (
-      anchorMod as { WalletPluginAnchor: new () => unknown }
-    ).WalletPluginAnchor;
+    const walletPlugins: unknown[] = [new WalletPluginAnchor()];
+    const wallets = ["anchor"];
 
-    // Ledger plugin is optional — Anchor often bridges hardware.
-    let ledgerPlugin: unknown | null = null;
     try {
       const ledgerMod = await import("@wharfkit/wallet-plugin-ledger");
-      const C = (ledgerMod as { WalletPluginLedger: new () => unknown })
+      const C = (ledgerMod as { WalletPluginLedger?: new () => unknown })
         .WalletPluginLedger;
-      if (C) ledgerPlugin = new C();
+      if (C) {
+        walletPlugins.push(new C());
+        wallets.push("ledger");
+      }
     } catch {
-      ledgerPlugin = null;
+      /* Ledger peer optional */
     }
-
-    const walletPlugins = [new WalletPluginAnchor()];
-    if (ledgerPlugin) walletPlugins.push(ledgerPlugin as never);
 
     const kit = new SessionKit({
       appName,
       chains: [{ id: chainId, url: rpcUrl }],
       ui: new WebRenderer(),
       walletPlugins,
-    });
+    }) as unknown as SessionKitLike;
 
-    return kit as unknown as SessionKitLike;
+    return { ok: true, kit, wallets };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    throw new Error(
-      `WharfKit not available (${msg}). Install @wharfkit/session, @wharfkit/web-renderer, @wharfkit/wallet-plugin-anchor. Optional: @wharfkit/wallet-plugin-ledger.`
-    );
+    return {
+      ok: false,
+      reason: `WharfKit unavailable (${msg}). npm i @wharfkit/session @wharfkit/web-renderer @wharfkit/wallet-plugin-anchor`,
+    };
   }
 }
 

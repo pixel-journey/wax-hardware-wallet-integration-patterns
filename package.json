@@ -1,6 +1,6 @@
 {
   "name": "wax-hardware-wallet-integration-patterns",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,7 +11,13 @@
   "dependencies": {
     "next": "15",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "@wharfkit/session": "^1.6.1",
+    "@wharfkit/web-renderer": "^1.4.1",
+    "@wharfkit/wallet-plugin-anchor": "^1.4.0"
+  },
+  "optionalDependencies": {
+    "@wharfkit/wallet-plugin-ledger": "^1.0.0"
   },
   "devDependencies": {
     "typescript": "^5",

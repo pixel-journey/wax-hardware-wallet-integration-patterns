@@ -1,17 +1,11 @@
-# VERIFICATION-LOG — wax-hardware-wallet-integration-patterns
+# Verification Log
 
-**Trust label:** `educational-reference`  
-**Updated:** 2026-10-20 (Pass 4 — complete)
+**Updated:** 2026-10-26 (Pass 5)
 
-| Claim | Status | Evidence |
-|-------|--------|----------|
-| scoreHardwareReadiness / pitfalls | **verified** (unit) | `engines.test.ts` |
-| SIGNING_ERROR_MATRIX | **verified** (unit) | `errorMatrix.test.ts` |
-| scoreRotationDrill / errorPathsHandledFromIds | **verified** (unit) | `rotationDrill.test.ts` |
-| Dry-run session | **partial** | local `createDryRunSession` |
-| Real Ledger/firmware | **out of scope** | optional WharfKit peers |
-| a11y high pitfalls | **partial** | `role="alert"` + live region |
-
-```bash
-npm test && npm run typecheck
-```
+| Claim | Status |
+| --- | --- |
+| Engines / matrix / drill | existing unit tests |
+| exportReadinessMarkdown | exportReport.test.ts |
+| summarizeOwnerKeys | accountKeyProbe.test.ts |
+| WAX chain id | sessionFactory constant |
+| CI | test + typecheck + build |
