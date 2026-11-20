@@ -1,9 +1,19 @@
-# Hardware wallets on WAX (education)
+# Education — hardware wallets on WAX
 
 > **Rung:** `npm test` passes (16). Readiness is a checklist of booleans. Nothing here reads a Ledger or asks for a seed.  
-> **The test is the rule.** Official model: [WAX permissions](https://docs.wax.io/build/core-concepts/permissions). Signing tool: [WharfKit](https://wharfkit.com/).
+> **The test is the rule.** Official: [WAX permissions](https://docs.wax.io/build/core-concepts/permissions) · [WharfKit](https://wharfkit.com/).
 
-## Predict, then run
+## Learning outcomes
+
+| Level | After this file |
+| --- | --- |
+| Beginner | Score 100 only when all five readiness flags are true |
+| Intermediate | Fail high on seed-in-browser even if other flags pass |
+| Masterclass | Require cancel, disconnect, and timeout paths before calling a device "ready" |
+
+---
+
+## Beginner — locked results
 
 | Call | Locked result |
 | --- | --- |
@@ -19,33 +29,53 @@
 
 A device that can be unplugged is not ready until cancel, disconnect, and timeout each have a path. Typing a seed into the page fails the high check even if every other flag is true.
 
-## Where this sits
+```bash
+npm test
+```
 
-| Question | Repo |
-| --- | --- |
-| Who else can recover owner if the device is lost? | [social recovery](https://github.com/pixel-journey/wax-social-recovery-and-key-backup-tools) |
-| How do I change the key without locking the account? | [rotation](https://github.com/pixel-journey/wax-safe-key-rotation-assistant) |
-| Daily actions that should not touch this device | [session keys](https://github.com/pixel-journey/wax-wharfkit-session-keys-and-linked-permissions) |
-| A proposal that several people must approve | [eosio.msig builder](https://github.com/pixel-journey/wax-multi-sig-proposal-builder-and-simulator) |
+---
 
-## Principles
+## Intermediate — principles
 
-
-1. **Keys stay on device** — never type seeds into a dApp.
-2. **Owner is rare** — daily ops via `active` or limited permissions (see session-keys repo).
-3. **Preview before confirm** — match UI to device screen.
-4. **Second path** — backup device, multi-sig, or social recovery.
+1. **Keys stay on device** — never type seeds into a dApp.  
+2. **Owner is rare** — daily ops via `active` or limited permissions (session-keys repo).  
+3. **Preview before confirm** — match UI to device screen.  
+4. **Second path** — backup device, multi-sig, or social recovery.  
 5. **Errors** — cancel, unplug, timeout must not strand the user.
 
-## WharfKit path
+### WharfKit path
 
 - **Anchor** is the primary recommended wallet plugin (often bridges Ledger).
 - Optional `@wharfkit/wallet-plugin-ledger` when available.
 - Prefer Session Kit over eosjs / UAL for greenfield work.
 
-## Related blueprints
+---
 
-- wax-wharfkit-session-keys-and-linked-permissions
-- wax-multi-sig-proposal-builder-and-simulator
-- wax-social-recovery-and-key-backup-tools
-- wax-safe-key-rotation-assistant
+## Masterclass — cluster
+
+| Question | Repo |
+| --- | --- |
+| Who recovers owner if the device is lost? | [social recovery](https://github.com/pixel-journey/wax-social-recovery-and-key-backup-tools) |
+| How to change the key without locking the account? | [rotation](https://github.com/pixel-journey/wax-safe-key-rotation-assistant) |
+| Daily actions that should not touch this device | [session keys](https://github.com/pixel-journey/wax-wharfkit-session-keys-and-linked-permissions) |
+| A proposal several people must approve | [msig builder](https://github.com/pixel-journey/wax-multi-sig-proposal-builder-and-simulator) |
+
+### Common mistakes
+
+1. Pasting a seed "just this once" into the browser.  
+2. Using the hardware owner key for every game claim.  
+3. Shipping UX with only a success path (no cancel/disconnect/timeout).
+
+### Exercises
+
+1. All flags true except `noSeedInBrowser` — pitfall? (`seed-in-browser` high.)  
+2. Only cancel handled — error paths complete? (No.)  
+3. Does this lab talk to a Ledger? (No.)
+
+---
+
+## What this course will not teach
+
+- Live USB/HID device APIs
+- Collecting or validating seed phrases
+- That a readiness score of 100 is a security audit
