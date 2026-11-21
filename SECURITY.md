@@ -7,8 +7,10 @@
 | Seed allowed in browser | pitfall `seed-in-browser` at **high** (even if other flags pass) |
 | Incomplete error paths | `error paths handled` false until **cancel + disconnect + timeout** |
 | Empty rotation drill | drill score 0 |
-| All five readiness flags true | score 100 |
-| All five false | score 0 |
+| All five readiness flags true | score **100** |
+| All five false | score **0** |
+
+Five readiness flags must all be true for a full score (device present, transport ok, error paths, rotation drill, no seed-in-browser).
 
 ## Not closed (production)
 
@@ -29,4 +31,13 @@
 
 ## Honesty limits
 
-No device I/O. Never paste a seed. Prefer WharfKit + Anchor for greenfield. [docs.wax.io permissions](https://docs.wax.io/build/core-concepts/permissions) · [WharfKit](https://wharfkit.com/) · cluster: [session keys](https://github.com/pixel-journey/wax-wharfkit-session-keys-and-linked-permissions) · [social recovery](https://github.com/pixel-journey/wax-social-recovery-and-key-backup-tools) · [rotation](https://github.com/pixel-journey/wax-safe-key-rotation-assistant).
+No device I/O. Never paste a seed.
+
+| Sibling | Distinction |
+| --- | --- |
+| [session keys](https://github.com/pixel-journey/wax-wharfkit-session-keys-and-linked-permissions) | Limited daily authority |
+| [key rotation](https://github.com/pixel-journey/wax-safe-key-rotation-assistant) | Add-first sequence |
+| [social recovery](https://github.com/pixel-journey/wax-social-recovery-and-key-backup-tools) | Helper weights |
+| [permission auditor](https://github.com/pixel-journey/wax-account-permission-auditor) | Structure score |
+
+Prefer WharfKit + Anchor for greenfield. [docs.wax.io permissions](https://docs.wax.io/build/core-concepts/permissions) · [WharfKit](https://wharfkit.com/).
